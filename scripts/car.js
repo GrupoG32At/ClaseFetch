@@ -4,7 +4,6 @@ const marca = document.getElementById("txtMarca")
 const modelo = document.getElementById("txtModelo")
 const categoriaId = document.getElementById("txtCategoriaId")
 
-
 function obtenerCar(){
     var myHeaders = new Headers();
     myHeaders.append("Accept", "application/json");
@@ -25,6 +24,7 @@ function obtenerCar(){
                             <td>${element.brand}</td>
                             <td>${element.model}</td>
                             <td>${element.category_id}</td>
+                            <td><button class="btn btn-info" onclick="obtenerCarPorId(${element.id})">info</button></td>
                         </tr>`
         });
     })
@@ -106,6 +106,27 @@ function actualizarCar(){
         .catch(error => console.log('error', error));
 }
 
+function obtenerCarPorId(idUrl){
+    var myHeaders = new Headers();
+    myHeaders.append("Accept", "application/json");
+
+    var requestOptions = {
+    method: 'GET',
+    headers: myHeaders,
+    redirect: 'follow'
+    };
+
+    fetch(`https://gd257f4deb7943f-ntvho1f0kb24nopq.adb.us-chicago-1.oraclecloudapps.com/ords/admin/car/car/${idUrl}`, requestOptions)
+    .then(response => response.json())
+    .then(result => {
+        const datos = result.items[0]
+        id.value = datos.id
+        modelo.value = datos.model
+        marca.value = datos.brand
+        categoriaId.value = datos.category_id
+    })
+    .catch(error => console.log('error', error));
+}
 
 obtenerCar()
 
